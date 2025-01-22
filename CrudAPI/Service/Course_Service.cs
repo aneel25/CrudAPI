@@ -23,7 +23,8 @@ namespace CrudAPI.Service
         public async Task<bool> DeleteCourse(int id)
         {
             var course = await _context.Courses.FindAsync(id);
-            if (course == null) return false;
+            if (course == null)
+            { return false; }
 
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
@@ -40,9 +41,11 @@ namespace CrudAPI.Service
             return await _context.Courses.FindAsync(id);
         }
 
-        public Task<Mst_Course> UpdateCourse(Mst_Course course)
+        public async Task<Mst_Course> UpdateCourse(Mst_Course course)
         {
-            throw new NotImplementedException();
+            _context.Entry(course).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return course;
         }
     }
 }
