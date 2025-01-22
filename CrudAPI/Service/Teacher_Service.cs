@@ -13,15 +13,25 @@ namespace CrudAPI.Service
         {
             _context = context;
         }
-
-        public async Task<Mst_Teacher> AddTeacher(Mst_Teacher teacher)
+        public async Task<Mst_Teacher> AddTeacher(Teacher _teacher)
         {
-            _context.Teachers.Add(teacher);
+            var teacher = new Mst_Teacher(); 
+            teacher.Name = _teacher.Name;
+
+            await _context.Teachers.AddAsync(teacher); 
             await _context.SaveChangesAsync();
+
             return teacher;
         }
 
-                public async Task<IEnumerable<Mst_Teacher>> GetAllTeachers()
+        //public async Task<Mst_Teacher> AddTeacher(Mst_Teacher teacher)
+        //{
+        //    _context.Teachers.Add(teacher);
+        //    await _context.SaveChangesAsync();
+        //    return teacher;
+        //}
+
+        public async Task<IEnumerable<Mst_Teacher>> GetAllTeachers()
         {
             return await _context.Teachers.ToListAsync();
         }
@@ -31,12 +41,20 @@ namespace CrudAPI.Service
             return await _context.Teachers.FindAsync(id);
         }
 
-        public async Task<Mst_Teacher> UpdateTeacher(Mst_Teacher teacher)
+        public async Task<Mst_Teacher> UpdateTeacher(int id, Mst_Teacher teacher)
         {
-            _context.Entry(teacher).State = EntityState.Modified;
+            var existingTeacher = await _context.Teachers.FindAsync(id);
+            if (existingTeacher == null)
+            {
+                throw new KeyNotFoundException("Teacher not found.");
+            }
+            
+            existingTeacher.Name = teacher.Name;
+
             await _context.SaveChangesAsync();
-            return teacher;
+            return existingTeacher;
         }
+
 
         public async Task<bool> DeleteTeacher(int id)
         {

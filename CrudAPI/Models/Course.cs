@@ -7,6 +7,7 @@ namespace CrudAPI.Models
         [Required]
 
         public string Title { get; set; }
+        public int TeacherId { get; set; }
        
     }
 }

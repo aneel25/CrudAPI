@@ -1,6 +1,7 @@
 ﻿using CrudAPI.DB;
 using CrudAPI.Entities;
 using CrudAPI.IService;
+using CrudAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrudAPI.Service
@@ -13,8 +14,10 @@ namespace CrudAPI.Service
         {
             _context = context;
         }
-        public async Task<Mst_Course> AddCourse(Mst_Course course)
+        public async Task<Mst_Course> AddCourse(Course _course)
         {
+            var course = new Mst_Course();
+            course.Title = _course.Title;
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
             return course;
@@ -41,11 +44,22 @@ namespace CrudAPI.Service
             return await _context.Courses.FindAsync(id);
         }
 
-        public async Task<Mst_Course> UpdateCourse(Mst_Course course)
+        public async Task<Mst_Course> UpdateCourse(int id,Mst_Course course)
         {
-            _context.Entry(course).State = EntityState.Modified;
+            var existingcourse = await _context.Courses.FindAsync(id);
+            if(existingcourse == null)
+            {
+                throw new KeyNotFoundException("Course not found.");
+            }
+            var existingteacher = await _context.Teachers.FindAsync(id);
+            if( existingteacher == null)
+            {
+                throw new KeyNotFoundException("teacher not found.");
+            }
+            existingcourse.Title = course.Title;
+            existingcourse.TeacherId = course.TeacherId;
             await _context.SaveChangesAsync();
-            return course;
+            return existingcourse;
         }
     }
 }

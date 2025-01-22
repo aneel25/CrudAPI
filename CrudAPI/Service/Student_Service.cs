@@ -16,7 +16,7 @@ namespace CrudAPI.Service
         public async Task<Mst_Student> AddStudent(Mst_Student student)
         {
             _context.Students.Add(student);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
             return student;
         }
 
@@ -43,11 +43,16 @@ namespace CrudAPI.Service
 
 
 
-        public async Task<Mst_Student> UpdateStudent(Mst_Student student)
+        public async Task<Mst_Student> UpdateStudent(int id, Mst_Student student)
         {
-            _context.Entry(student).State = EntityState.Modified;   
+            var existingstudent = await _context.Students.FindAsync(id);
+            if (existingstudent == null)
+            {
+                throw new KeyNotFoundException("Student not found.");
+            }
+            existingstudent.Name = student.Name;
             await _context.SaveChangesAsync();
-            return student;
+            return existingstudent;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CrudAPI.Entities;
+using CrudAPI.Models;
 
 namespace CrudAPI.IService
 {
@@ -6,8 +7,8 @@ namespace CrudAPI.IService
     {
         Task<IEnumerable<Mst_Teacher>> GetAllTeachers();
         Task<Mst_Teacher> GetTeacherById(int id);
-        Task<Mst_Teacher> AddTeacher(Mst_Teacher teacher);
-        Task<Mst_Teacher> UpdateTeacher(Mst_Teacher teacher);
+        Task<Mst_Teacher> AddTeacher(Teacher _teacher);
+        Task<Mst_Teacher> UpdateTeacher(int id, Mst_Teacher teacher);
         Task<bool> DeleteTeacher(int id);
     }
 }
