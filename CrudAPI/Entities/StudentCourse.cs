@@ -1,11 +1,15 @@
-﻿namespace CrudAPI.Entities
+﻿using CrudAPI.Models;
+
+namespace CrudAPI.Entities
 {
     public class StudentCourse
     {
-        public int StudenId { get; set; }
-        public Mst_Student Student { get; set; }
+        public Guid Id { get; set; } // Primary Key
+        public Guid Student_Id { get; set; } // Foreign Key
+        public Guid Course_Id { get; set; } // Foreign Key
 
-        public int CourseId { get; set; }
+        // Navigation properties
+        public Mst_Student Student { get; set; }
         public Mst_Course Course { get; set; }
     }
 }
